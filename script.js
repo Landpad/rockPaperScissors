@@ -139,109 +139,165 @@ function getComputerChoice(value){
 
 }
 
-function getPlayerChoice (){
+function getPlayerChoice (selection){
     let weaponSelected;
-    let correctInput = false;
 
-    while (correctInput == false) {
-        let playerChoice = prompt('Type: Rock, paper or scissors');
-        playerChoice = playerChoice.toUpperCase();
-
-        switch(playerChoice) {
+        switch(selection) {
             case 'ROCK':
                 weaponSelected = 'Rock';
-                correctInput = true;
                 break;
             case 'PAPER':
                 weaponSelected = 'Paper';
-                correctInput = true;
                 break;
             case 'SCISSORS':
                 weaponSelected = 'Scissors';
-                correctInput = true;
                 break;
-            default :
-                correctInput = false;
-                alert('The input must be Rock, paper or scissors');
         }
+
+        return weaponSelected;
+
     }
 
-    return weaponSelected;
+function setParagraphContent(sentence, id){
+    let para = getElement(id);
+
+    para.textContent = sentence;
+
 }
 
-function playRound(){
-    let playerWon = null;
-
-    while(playerWon == null){
-        let randomValue = Math.floor(Math.random() * 3) + 1;
-        let computerChoice = getComputerChoice(randomValue);
-        let playerChoice = getPlayerChoice();
-
-        if(computerChoice == 'Rock' && playerChoice == 'Rock') {
-            playerWon = null;
-            alert ('TIE!')
-        }
-        if(computerChoice == 'Rock' && playerChoice == 'Paper'){
-            playerWon = true;
-        }
-        if(computerChoice == 'Rock' && playerChoice == 'Scissors'){
-            playerWon = false;
-        }
-        if(computerChoice == 'Paper' && playerChoice == 'Paper'){
-            playerWon = null;
-            alert ('TIE!');
-        }
-        if(computerChoice == 'Paper' && playerChoice == 'Scissors'){
-            playerWon = true;
-        }
-        if(computerChoice == 'Scissors' && playerChoice == 'Scissors'){
-            playerWon = null;
-            alert ('TIE!');
-        }
-        if(computerChoice == 'Scissors' && playerChoice == 'Rock'){
-            playerWon = true;
-        }
-        if(computerChoice == 'Paper' && playerChoice == 'Rock'){
-            playerWon = false;
-        }
-        if(computerChoice == 'Scissors' && playerChoice == 'Paper'){
-            playerWon = false;
-        }
-
+function displayRoundResult(winner){
+    if(winner == true){
+        setParagraphContent('Player won the round!', 'roundPara');
+        playerScore = playerScore + 1;
+    } else if (winner == false) {
+        setParagraphContent('Computer won the round!', 'roundPara');
+        computerScore = computerScore + 1;
+    } else {
+        setParagraphContent('TIE!', 'roundPara');
     }
 
-    if(playerWon == true){
-        alert('You won the round!')
-    } else {
-        alert('Computer won the round!')
+}
+
+function determineRoundWinner(selection){
+    let playerWon = null;
+    let randomValue = Math.floor(Math.random() * 3) + 1;
+    let computerChoice = getComputerChoice(randomValue);
+    let playerChoice = getPlayerChoice(selection);
+
+    if(computerChoice == 'Rock' && playerChoice == 'Rock') {
+        playerWon = null;
+    }
+    if(computerChoice == 'Rock' && playerChoice == 'Paper'){
+        playerWon = true;
+    }
+    if(computerChoice == 'Rock' && playerChoice == 'Scissors'){
+        playerWon = false;
+    }
+    if(computerChoice == 'Paper' && playerChoice == 'Paper'){
+        playerWon = null;
+    }
+    if(computerChoice == 'Paper' && playerChoice == 'Scissors'){
+        playerWon = true;
+    }
+    if(computerChoice == 'Scissors' && playerChoice == 'Scissors'){
+        playerWon = null;
+    }
+    if(computerChoice == 'Scissors' && playerChoice == 'Rock'){
+        playerWon = true;
+    }
+    if(computerChoice == 'Paper' && playerChoice == 'Rock'){
+        playerWon = false;
+    }
+    if(computerChoice == 'Scissors' && playerChoice == 'Paper'){
+        playerWon = false;
     }
 
     return playerWon;
 
 }
 
-function playGame (){
-    let playerCounter = 0;
-    let computerCounter = 0;
-    let roundCounter = 0;
-    let playerWon = null;
+function createButton(buttonText, buttonId){
+    const button = document.createElement('button');
+    button.textContent = buttonText;
+    button.setAttribute('id', `${buttonId}`);
 
-    while(roundCounter < 5 && playerCounter < 3 && computerCounter < 3) {
-        playerWon = playRound();
-        if(playerWon == true){
-            playerCounter = playerCounter + 1;
-        } else {
-            computerCounter = computerCounter + 1;
-        }
-        roundCounter++;
-    }
+    return button;
 
-    if(playerCounter > computerCounter){
-        alert('You won the game!');
-    } else {
-        alert('Computer won the game!');
-    }
 }
+
+function getElement(id){
+    const element = document.querySelector(`#${id}`);
+
+    return element;
+
+}
+
+function disableRpsButtons(boolean){
+    const buttonsContainer = getElement('container');
+    const buttons = buttonsContainer.querySelectorAll('button');
+
+        buttons.forEach(button => {
+            button.disabled = boolean;
+            if(button.id == 'playAgainButton'){
+                button.disabled = false;
+            }
+        })
+
+}
+
+function displayPlayAgainButton(){
+    const buttonsContainer = getElement('container');
+    const playAgainDiv = document.createElement('div');
+    playAgainDiv.setAttribute('id','playAgainContainer');
+    const playAgainButton = createButton('PLAY AGAIN!', 'playAgainButton');
+    buttonsContainer.appendChild(playAgainDiv);
+    playAgainDiv.appendChild(playAgainButton);
+
+}
+
+
+
+function playRound(selection){
+    const roundPara = getElement('roundPara');
+    const scorePara = getElement('scorePara');
+    let gameFinished = false;
+    let winner = determineRoundWinner(selection);
+
+    displayRoundResult(winner);
+
+    setParagraphContent(`Player: ${playerScore} Computer: ${computerScore}`, 'scorePara');
+
+    if(playerScore == 5){
+        setParagraphContent('Player won the game!', 'roundPara');
+        gameFinished = true;
+    } else if (computerScore == 5){
+        setParagraphContent('Computer won the game!', 'roundPara');
+        gameFinished = true;
+    }
+
+    if(gameFinished == true){
+        disableRpsButtons('false');
+        displayPlayAgainButton();
+        
+    }
+
+    return winner;
+
+}
+
+let playerScore = 0;
+let computerScore = 0;
+
+const rockBtn = getElement('rock');
+rockBtn.addEventListener('click', () => playRound('ROCK'));
+
+const paperBtn = getElement('paper');
+paperBtn.addEventListener('click', () => playRound('PAPER'));
+
+const scissorsBtn = getElement('scissors');
+scissorsBtn.addEventListener('click', () => playRound('SCISSORS'));
+
+
 
 
 
