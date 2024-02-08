@@ -47,13 +47,13 @@ function setParagraphContent(sentence, id){
 
 function displayRoundResult(winner){
     if(winner == true){
-        setParagraphContent('Player won the round!', 'roundPara');
+        setParagraphContent('You won the round!', 'roundPara');
         playerScore = playerScore + 1;
     } else if (winner == false) {
         setParagraphContent('Computer won the round!', 'roundPara');
         computerScore = computerScore + 1;
     } else {
-        setParagraphContent('TIE!', 'roundPara');
+        setParagraphContent('DRAW!', 'roundPara');
     }
 
 }
@@ -126,11 +126,11 @@ function toggleRpsButtons(boolean){
 }
 
 function displayPlayAgainButton(){
-    const buttonsContainer = getElement('container');
+    const infoContainer = getElement('infoContainer');
     const playAgainDiv = document.createElement('div');
     playAgainDiv.setAttribute('id','playAgainContainer');
     const playAgainButton = createButton('PLAY AGAIN!', 'playAgainButton');
-    buttonsContainer.appendChild(playAgainDiv);
+    infoContainer.appendChild(playAgainDiv);
     playAgainDiv.appendChild(playAgainButton);
 
 }
@@ -160,7 +160,7 @@ function playRound(selection){
 
     displayRoundResult(winner);
 
-    setParagraphContent(`Player: ${playerScore} Computer: ${computerScore}`, 'scorePara');
+    setParagraphContent(`You: ${playerScore} Computer: ${computerScore}`, 'scorePara');
 
     if(playerScore == 5){
         setParagraphContent('Player won the game!', 'roundPara');

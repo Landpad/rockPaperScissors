@@ -4,36 +4,65 @@
     padding: 0;
 }
 
-.rpsContainer{
+#container{
+    height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    background-color: #009999;
 }
 
 #rock, #paper, #scissors{
+    width: fit-content;
     background: none;
 	color: inherit;
-	border: none;
-	padding: 10px;
-    margin: 0;
+	border: 3px solid black;
+	padding: 0px;
+    margin: 10px;
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+    border-radius: 5px;
+}
+
+img{
+    display: block;
+}
+
+#infoContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 40px;
+}
+
+#results {
+    display: flex;
+    flex-direction: column;
+}
+
+#results p {
+    padding-top: 40px;
+    width: 30vw;
+    text-align: center;
 }
 
 #playAgainContainer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding-top: 40px;
 }
 
 #playAgainButton{
+    width: 235px;
+    height: 50px;
+    background-color: #009900;
     font-size: 2.25rem;
     color: #F9FAF8;
     border-radius: 8px;
     border: 3px;
     padding: 4px 8px 4px 8px;
-    background-color: green;
+   
 }
 
 p{
